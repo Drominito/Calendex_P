@@ -1,0 +1,94 @@
+﻿<Window x:Class="Calendex.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Calendex"
+        mc:Ignorable="d"
+        
+        Title="MainWindow" Background="Black" x:Name="MainWindowAttribute" Foreground="DarkGray" MinWidth="500" MinHeight="500" MaxWidth="1920" MaxHeight="1080" SizeChanged="Window_SizeChanged">
+
+
+
+    <Grid>
+
+        <TabControl Margin="100, 75">
+            <TabItem Header="Kalender">
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                        <!--<Button Content="GridOptions" GotFocus="GridOptionButton_GotFocus" x:Name="GridOptionButton" Height="20" Mouse.GotMouseCapture="GridOptionButton_GotMouseCapture"/>-->
+                        <Button  Grid.Column="2" Content="+" Height="20" Width="20"  VerticalAlignment="Top" FontSize="15" x:Name="PlusOptionButton" Click="PlusOptionButton_Click"/>
+                        <Button  Grid.Column="3" Content="-" Height="20" Width="20"  VerticalAlignment="Top" FontSize="15" x:Name="MinusOptionButton" Click="MinusOptionButton_Click"/>
+                        <Button  Grid.Column="5" Content="•" Height="20" Width="20"  VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="15" x:Name="ReloadButton" Click="ReloadButton_Click"/>
+
+                    <ScrollViewer Background="DarkGray" ScrollBar.Scroll="RainBow_Scroll" Margin="0, 20, 0 ,0" Grid.ColumnSpan="6" x:Name="ScrollViewerForButtonAnim">
+
+                        <Grid x:Name="KalenderRaster" >
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+
+
+
+                            </Grid.RowDefinitions>
+
+
+
+
+                            <!--<Button Click="RainBow" Grid.Row="4"/>-->
+
+
+
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+                
+            </TabItem>
+
+            <TabItem Header="Notizen">
+
+            </TabItem>
+
+        </TabControl>
+
+        <DockPanel VerticalAlignment="Bottom">
+            <Label  Foreground="White" HorizontalAlignment="Left"  x:Name="WindowInfoLabel" FontSize="25"/>
+
+            <Label Foreground="White" HorizontalAlignment="Right" x:Name="ButtonsInfoLabel" FontSize="25"/>
+        </DockPanel>
+
+
+        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center">
+            <Label Height="50" Foreground="White" x:Name="SelectedIndexUI3" Content="SelectedIndexUI :)"/>
+        </StackPanel>
+
+    </Grid>
+
+
+</Window>
