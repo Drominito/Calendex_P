@@ -32,7 +32,7 @@ namespace Calendex
         public short YearNumber = 365;
         public int GridAmount;
 
-
+        public int TempPoints = 0;
         public Brush RedBrush;
         public Brush GreenBrush;
         public Brush NormalBrush;
@@ -53,11 +53,13 @@ namespace Calendex
 
 
             InitializeComponent();
-            
-            newRow = new RowDefinition();
-            newColumn = new ColumnDefinition();
-            newColumn.Width = new GridLength(1, GridUnitType.Star);
-            newRow.Height = new GridLength(1, GridUnitType.Star);
+
+            //Extra Grids für Testing
+            //newRow = new RowDefinition();
+            //newColumn = new ColumnDefinition();
+            //newColumn.Width = new GridLength(1, GridUnitType.Star);
+            //newRow.Height = new GridLength(1, GridUnitType.Star);
+
             cb = new CalenderBox(KalenderRaster);
             ActualCubeNumber = cb.ProduktGrid;
 
@@ -67,7 +69,7 @@ namespace Calendex
             NormalBrush = new SolidColorBrush(Colors.White);
             //Weiß ist neutral und die Buttons sind automatisch immer Weiß.
 
-            cb.AddButtonsUI("Monday", NormalBrush, GreenBrush, KalenderRaster);
+            cb.GenerateStarterButtons("Monday", NormalBrush, GreenBrush, KalenderRaster);
 
             MainWindowAttribute.StateChanged += MainWindowAttribute_StateChanged;
             cb.MyButtonFeld[0].SizeChanged += MyButtonSizeChanged;
@@ -78,6 +80,16 @@ namespace Calendex
 
             for (int i = 0; i <= cb.ProduktGrid; i++) { cb.MyButtonFeld[i].Click += ControllTheGrid; }
 
+
+
+
+
+
+
+
+
+
+           
 
             //  Warscheinlich überflüssig und ändert nichts, aber ich könnte mich vielleicht täuschen.
 
@@ -193,7 +205,7 @@ namespace Calendex
 
             int ColumnGridPointer = 0;
             int RowGridPointer = 0;
-
+            int secondJ = 0;
             
             if (!IfShortSize)
             {
@@ -201,9 +213,10 @@ namespace Calendex
                 {                                                      // Nach jedem ende sollte ein neues Button erstellt werden
 
                     if (i > cb.ProduktGrid) { break; }
+                   
 
 
-                    if (ColumnGridPointer %KalenderRasterColumn == 0 && ColumnGridPointer != 0)
+                    if (ColumnGridPointer %ColumnGrid == 0 && ColumnGridPointer != 0)
                     {
                         ColumnGridPointer = 0; // Auf Nächste Spalte setzen
                         RowGridPointer++;
@@ -213,9 +226,16 @@ namespace Calendex
                             DefaultButtonInfoGUI.Add(Day, backgroundcolor, prioritycolors, KPosition, ColumnGridPointer, RowGridPointer);
 
                             cb.MyButtonFeld[i] = new Button();
+
+                            // Für die Abkürzungen verändern (Notepad++ Zeile 50-54)
                             
-                            cb.MyButtonFeld[i].Content = cb.CalenderDays(i + j);      // Für die Abkürzungen verändern (Notepad++ Zeile 50-54)
                             
+                            
+                            
+                            
+                                cb.MyButtonFeld[i].Content = cb.CalenderDays(i + j);
+                            
+
                             cb.MyButtonFeld[i].Background = DefaultButtonInfoGUI.ButtonsBackgroundColor;
 
                             Grid.SetColumn(cb.MyButtonFeld[i], ColumnGridPointer);
@@ -224,7 +244,9 @@ namespace Calendex
                             KPosition.Children.Add(cb.MyButtonFeld[i]);
 
                             ColumnGridPointer++;
+                            secondJ = j;
                         }
+                        i = i + secondJ;
                         ColumnGridPointer = 0;
                     }
 
@@ -248,7 +270,7 @@ namespace Calendex
                     if (i > cb.ProduktGrid) { break; }
 
 
-                    if (ColumnGridPointer % 7 == 0 && ColumnGridPointer != 0)
+                    if (ColumnGridPointer %ColumnGrid == 0 && ColumnGridPointer != 0)
                     {
                         ColumnGridPointer = 0; // Auf Nächste Spalte setzen
                         RowGridPointer++;
@@ -424,7 +446,7 @@ namespace Calendex
 
         private void PlusOptionButton_Click(object sender, RoutedEventArgs e)
         {
-
+            TempPoints++;
             ColumnDefinition newColumn1 = new ColumnDefinition();
             RowDefinition newRow1 = new RowDefinition();
 
@@ -438,11 +460,17 @@ namespace Calendex
             double ActualNormalNumber = Math.Sqrt(ActualCubeNumber);
             ActualNormalNumber++;
             double CubeNumber = Math.Pow(ActualNormalNumber, 2);
-            for (int i = cb.ProduktGrid; i > 0; i--) { cb.MyButtonFeld[i].Click -= ControllTheGrid; }
+            // Es muss doch nichts nochmal entfernent weil es nichts zum enfernen gibt, und die Abonnierungs methode macht kein unterschied zum welchen es gehört
 
             UpdateLoop("Monday", NormalBrush, GreenBrush, KalenderRaster, false);
 
-            for (int i = 0; i < cb.ProduktGrid; i++) { cb.MyButtonFeld[i].Click += ControllTheGrid; }
+            for (int i = 0; i < cb.ProduktGrid; i++)
+            {
+                if (cb.MyButtonFeld[i] == null)
+                {
+                    cb.MyButtonFeld[i].Click += ControllTheGrid;
+                }
+            }
         }
 
         private void ReloadButton_Click(object sender, RoutedEventArgs e)
@@ -451,6 +479,9 @@ namespace Calendex
             ActualNormalNumber++;
             double CubeNumber = Math.Pow(ActualNormalNumber, 2);
 
+            int KalenderRasterColumn = KalenderRaster.ColumnDefinitions.Count;
+            int KalenderRasterRow    = KalenderRaster.RowDefinitions.Count;
+            cb.ProduktGrid = KalenderRasterColumn * KalenderRasterRow;
 
             for (int i = cb.ProduktGrid; i > 0; i--) { cb.MyButtonFeld[i].Click -= ControllTheGrid; }
 

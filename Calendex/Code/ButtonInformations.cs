@@ -61,6 +61,7 @@ namespace Calendex.Code.ButtonInformation_Namespace
 
         public ButtonInformations()
         {
+
             // Eigentlich könnte ich das hier weglassen, sonst macht es wie immer, es macht Automatisch nur ich zeige den Konstruktor an
             // Lasse dich davon nicht ablenken.
         }
