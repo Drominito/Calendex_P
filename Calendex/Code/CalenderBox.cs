@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -66,89 +67,117 @@ namespace Calendex.Code.CalenderBox_Namespace
             int ColumnGridPointer = 0;
             int RowGridPointer = 0;
 
-            int tempIForDays = 0;
-            int TempJForAddingI = 0;
-            int OldI = 0;
+            int j = 0;
 
-            for (int i = 0; i < MyButtonFeld.Length; i++)          // Ich soll nicht nur auf diesen Array achten sondern auch bei der Schleife
-            {                                                      // Nach jedem ende sollte ein neues Button erstellt werden
-                if (i > ProduktGrid) { break; }
-
-
-                if (ColumnGridPointer %ColumnGrid == 0 && ColumnGridPointer != 0)
+            for (int i = 0; i <= ( (KalenderRasterColumn * KalenderRasterColumn)); i++)  //y      // bei mal 4 ist es auf 39 gelandet | und auf 5 47 | die schrittweise ist also 8   | 8/4 = 2; 47 + 2 = 49
+            {
+                if (i + j > 49)
                 {
-                    ColumnGridPointer = 0; // Auf Nächste Spalte setzen
+                    break;
+                }
+                if (i %2 != 0 && i != 0)
+                {
+                    i += KalenderRasterRow;
+                    j = 0;
+
                     RowGridPointer++;
-
-                    for (int j = 0; j < ColumnGrid; j++)
-                    {
-                        DefaultButtonInfoGUI.Add(Day, backgroundcolor, prioritycolors, KPosition, ColumnGridPointer, RowGridPointer);
-
-                        int AddedIndex = i + 0;
-                        int AdvancedAddedIndex = i + j;
-
-                        if (j != 0)
-                        {
-                            MyButtonFeld[AdvancedAddedIndex] = new Button();
-
-                            // Für die Abkürzungen verändern (Notepad++ Zeile 50-54)
-
-                            MyButtonFeld[AdvancedAddedIndex].Content = CalenderDays((i) + j);
-                            MyButtonFeld[AdvancedAddedIndex].Background = DefaultButtonInfoGUI.ButtonsBackgroundColor;
-
-                            Grid.SetColumn(MyButtonFeld[AdvancedAddedIndex], ColumnGridPointer);
-                            Grid.SetRow(MyButtonFeld[AdvancedAddedIndex], RowGridPointer);
-
-                            KPosition.Children.Add(MyButtonFeld[AdvancedAddedIndex]);
-                        }
-                        else        // Diese bedienung passiert nur einmal
-                        {
-                            MyButtonFeld[AddedIndex] = new Button();
-
-                            // Für die Abkürzungen verändern (Notepad++ Zeile 50-54)
-
-                            MyButtonFeld[AddedIndex].Content = CalenderDays((i - tempIForDays) + j);
-                            MyButtonFeld[AddedIndex].Background = DefaultButtonInfoGUI.ButtonsBackgroundColor;
-
-                            Grid.SetColumn(MyButtonFeld[AddedIndex], ColumnGridPointer);
-                            Grid.SetRow(MyButtonFeld[AddedIndex], RowGridPointer);
-
-                            KPosition.Children.Add(MyButtonFeld[AddedIndex]);
-                        }
-
-                        ColumnGridPointer++;
-                        tempIForDays++;
-                        TempJForAddingI++;
-                        //i++;
-                    }
-                    ColumnGridPointer = 0;
-                    OldI = i;
                 }
-                if (OldI == i)
+
+                for (; j <= KalenderRasterRow; j++) // x
                 {
-                    i += TempJForAddingI; 
-                    TempJForAddingI = 0;
+
+                     MyButtonFeld[i + j] = new Button();
+
+                    // Für die Abkürzungen verändern (Notepad++ Zeile 50-54)
+
+                    MyButtonFeld[i + j].Content = CalenderDays(i + j);
+                    MyButtonFeld[i + j].Background = DefaultButtonInfoGUI.ButtonsBackgroundColor;
+
+                    Grid.SetColumn(MyButtonFeld[i + j], j); // 8
+                    Grid.SetRow(MyButtonFeld[i + j], RowGridPointer);   // 6
+                    KPosition.Children.Add(MyButtonFeld[i + j]);
+                }
+            }
+
+            //for (int i = 0; i < MyButtonFeld.Length; i++)          // Ich soll nicht nur auf diesen Array achten sondern auch bei der Schleife      // VERSUCHE MAL EINFACH MIT EINER NORMALEN VERSCHACHTELTEN SCHLEIFE, WIE DU FÜRHER MIT DEM KREISEN (PI) GEMACHT HAST
+            //{                                                      // Nach jedem ende sollte ein neues Button erstellt werden
+            //    if (i > ProduktGrid) { break; }
+
+
+            //    if (ColumnGridPointer %ColumnGrid == 0 && ColumnGridPointer != 0)
+            //    {
+            //        ColumnGridPointer = 0; // Auf Nächste Spalte setzen
+            //        RowGridPointer++;
+
+            //        for (int j = 0; j < ColumnGrid; j++)
+            //        {
+            //            DefaultButtonInfoGUI.Add(Day, backgroundcolor, prioritycolors, KPosition, ColumnGridPointer, RowGridPointer);
+
+            //            int AddedIndex = i + 0;
+            //            int AdvancedAddedIndex = i + j;
+
+            //            if (j != 0)
+            //            {
+            //                MyButtonFeld[AdvancedAddedIndex] = new Button();
+
+            //                // Für die Abkürzungen verändern (Notepad++ Zeile 50-54)
+
+            //                MyButtonFeld[AdvancedAddedIndex].Content = CalenderDays((i) + j);
+            //                MyButtonFeld[AdvancedAddedIndex].Background = DefaultButtonInfoGUI.ButtonsBackgroundColor;
+
+            //                Grid.SetColumn(MyButtonFeld[AdvancedAddedIndex], ColumnGridPointer);
+            //                Grid.SetRow(MyButtonFeld[AdvancedAddedIndex], RowGridPointer);
+
+            //                KPosition.Children.Add(MyButtonFeld[AdvancedAddedIndex]);
+            //            }
+            //            else        // Diese bedienung passiert nur einmal
+            //            {
+            //                MyButtonFeld[AddedIndex] = new Button();
+
+            //                // Für die Abkürzungen verändern (Notepad++ Zeile 50-54)
+
+            //                MyButtonFeld[AddedIndex].Content = CalenderDays((i - tempIForDays) + j);
+            //                MyButtonFeld[AddedIndex].Background = DefaultButtonInfoGUI.ButtonsBackgroundColor;
+
+            //                Grid.SetColumn(MyButtonFeld[AddedIndex], ColumnGridPointer);
+            //                Grid.SetRow(MyButtonFeld[AddedIndex], RowGridPointer);
+
+            //                KPosition.Children.Add(MyButtonFeld[AddedIndex]);
+            //            }
+
+            //            ColumnGridPointer++;
+            //            tempIForDays++;
+            //            TempJForAddingI++;
+            //            //i++;
+            //        }
+            //        ColumnGridPointer = 0;
+            //        OldI = i;
+            //    }
+            //    if (OldI == i)
+            //    {
+            //        i += TempJForAddingI; 
+            //        TempJForAddingI = 0;
                     
-                    // wegen dem zweiten überspringt es zu viel, ich soll ein alten i nehmen und dann wenn der alte und der neue i nicht gleich sind, dann setze ich das zweite zurück auf 0
-                    // ES kann sein, dass ich hier warscheinlich noch ein weiteres modulo nutzen muss.
-                }
-                else
-                {
-                    TempJForAddingI = 0;
-                }
+            //        // wegen dem zweiten überspringt es zu viel, ich soll ein alten i nehmen und dann wenn der alte und der neue i nicht gleich sind, dann setze ich das zweite zurück auf 0
+            //        // ES kann sein, dass ich hier warscheinlich noch ein weiteres modulo nutzen muss.
+            //    }
+            //    else
+            //    {
+            //        TempJForAddingI = 0;
+            //    }
                 
 
-                MyButtonFeld[i] = new Button();
-                MyButtonFeld[i].Content = CalenderDays(i);
-                MyButtonFeld[i].Background = DefaultButtonInfoGUI.ButtonsBackgroundColor;       // ACHTE DAS BACKGROUND NICHT NULL IST.
+            //    MyButtonFeld[i] = new Button();
+            //    MyButtonFeld[i].Content = CalenderDays(i);
+            //    MyButtonFeld[i].Background = DefaultButtonInfoGUI.ButtonsBackgroundColor;       // ACHTE DAS BACKGROUND NICHT NULL IST.
 
-                Grid.SetColumn(MyButtonFeld[i], ColumnGridPointer);
-                Grid.SetRow(MyButtonFeld[i], RowGridPointer);
+            //    Grid.SetColumn(MyButtonFeld[i], ColumnGridPointer);
+            //    Grid.SetRow(MyButtonFeld[i], RowGridPointer);
 
-                KPosition.Children.Add(MyButtonFeld[i]);
+            //    KPosition.Children.Add(MyButtonFeld[i]);
 
-                ColumnGridPointer++;
-            }
+            //    ColumnGridPointer++;
+            //}
 
 
 

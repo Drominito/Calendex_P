@@ -22,7 +22,7 @@ namespace Calendex
     /// </summary>
     public partial class MainWindow : Window
     {
-        RowDefinition    newRow;
+        RowDefinition newRow;
         ColumnDefinition newColumn;
 
         public DispatcherTimer timer = new DispatcherTimer();
@@ -36,6 +36,7 @@ namespace Calendex
         public Brush RedBrush;
         public Brush GreenBrush;
         public Brush NormalBrush;
+        public bool IsFirstGeneratetCalender = false;
         public MainWindow()
         {
             bool ManuallyActivating = false;
@@ -89,7 +90,7 @@ namespace Calendex
 
 
 
-           
+
 
             //  Warscheinlich überflüssig und ändert nichts, aber ich könnte mich vielleicht täuschen.
 
@@ -123,7 +124,7 @@ namespace Calendex
         {
 
             SelectedIndexUI3.Content = sender.ToString();   //Mein Größter ERROR
-            string EventMessage = Convert.ToString(SelectedIndexUI3.Content);
+            string EventMessage = Convert.ToString(SelectedIndexUI3.Content + "" + cb.MyButtonFeld);
             string DoneEventMessage = "";
             for (int i = 32; i < 49; i++)
             {
@@ -199,117 +200,90 @@ namespace Calendex
             int KalenderRasterRow = KalenderRaster.RowDefinitions.Count;
             cb.ProduktGrid = KalenderRasterColumn * KalenderRasterRow;
 
+            double TakeOldNumbBySqrt = Math.Sqrt(cb.ProduktGrid) - 1;
+            double LastProduktGrid = Math.Pow(TakeOldNumbBySqrt, 2);
+
 
             int ColumnGrid = KalenderRasterColumn;
             int RowGrid = KalenderRasterRow;
-
             int ColumnGridPointer = 0;
-            int RowGridPointer = 0;
+            int RowGridPointer = KalenderRasterRow;
+
+
             int secondJ = 0;
-            
-            if (!IfShortSize)
+
+
+
+            //int j = 0;
+
+            //for (int i = (int)LastProduktGrid; i <= (cb.ProduktGrid); i++)  //y      // bei mal 4 ist es auf 39 gelandet | und auf 5 47 | die schrittweise ist also 8   | 8/4 = 2; 47 + 2 = 49
+            //{
+
+
+            if (!IsFirstGeneratetCalender)
             {
-                for (int i = 0; i < cb.MyButtonFeld.Length; i++)          // Ich soll nicht nur auf diesen Array achten sondern auch bei der Schleife
-                {                                                      // Nach jedem ende sollte ein neues Button erstellt werden
+                for (int i = (int)LastProduktGrid + (int)TakeOldNumbBySqrt; i <= (cb.ProduktGrid); i++) // x
+                {
 
-                    if (i > cb.ProduktGrid) { break; }
-                   
+                    
+                    //if (i % 2 != 0 && i != (int)LastProduktGrid + (int)TakeOldNumbBySqrt)
+                    //{
+                    //    //i += KalenderRasterRow;
 
-
-                    if (ColumnGridPointer %ColumnGrid == 0 && ColumnGridPointer != 0)
-                    {
-                        ColumnGridPointer = 0; // Auf Nächste Spalte setzen
-                        RowGridPointer++;
-
-                        for (int j = 0; j < ColumnGrid; j++)
-                        {
-                            DefaultButtonInfoGUI.Add(Day, backgroundcolor, prioritycolors, KPosition, ColumnGridPointer, RowGridPointer);
-
-                            cb.MyButtonFeld[i] = new Button();
-
-                            // Für die Abkürzungen verändern (Notepad++ Zeile 50-54)
-                            
-                            
-                            
-                            
-                            
-                                cb.MyButtonFeld[i].Content = cb.CalenderDays(i + j);
-                            
-
-                            cb.MyButtonFeld[i].Background = DefaultButtonInfoGUI.ButtonsBackgroundColor;
-
-                            Grid.SetColumn(cb.MyButtonFeld[i], ColumnGridPointer);
-                            Grid.SetRow(cb.MyButtonFeld[i], RowGridPointer);
-
-                            KPosition.Children.Add(cb.MyButtonFeld[i]);
-
-                            ColumnGridPointer++;
-                            secondJ = j;
-                        }
-                        i = i + secondJ;
-                        ColumnGridPointer = 0;
-                    }
+                    //    RowGridPointer++;
+                    //    ColumnGridPointer = 0;
+                    //}
 
                     cb.MyButtonFeld[i] = new Button();
+
+                    // Für die Abkürzungen verändern (Notepad++ Zeile 50-54)
+
+                    cb.MyButtonFeld[i] = new Button();     // ANFANGEN MIT 56
+
                     cb.MyButtonFeld[i].Content = cb.CalenderDays(i);
-                    cb.MyButtonFeld[i].Background = DefaultButtonInfoGUI.ButtonsBackgroundColor;       // ACHTE DAS BACKGROUND NICHT NULL IST.
+                    cb.MyButtonFeld[i].Background = DefaultButtonInfoGUI.ButtonsBackgroundColor;
 
                     Grid.SetColumn(cb.MyButtonFeld[i], ColumnGridPointer);
-                    Grid.SetRow(cb.MyButtonFeld[i], RowGridPointer);
+                    Grid.SetRow(cb.MyButtonFeld[i], KalenderRasterRow);
 
-                    KPosition.Children.Add(cb.MyButtonFeld[i]);
-
+                    cb.KPositionFeld.Children.Add(cb.MyButtonFeld[i]);
                     ColumnGridPointer++;
+
                 }
+                IsFirstGeneratetCalender = true;
             }
             else
             {
-                for (int i = 0; i < cb.MyButtonFeld.Length; i++)          // Ich soll nicht nur auf diesen Array achten sondern auch bei der Schleife
-                {                                                      // Nach jedem ende sollte ein neues Button erstellt werden
-
-                    if (i > cb.ProduktGrid) { break; }
+                for (int i = (int)LastProduktGrid; i <= (cb.ProduktGrid); i++) // x
+                {
 
 
-                    if (ColumnGridPointer %ColumnGrid == 0 && ColumnGridPointer != 0)
-                    {
-                        ColumnGridPointer = 0; // Auf Nächste Spalte setzen
-                        RowGridPointer++;
+                    //if (i %KalenderRasterColumn != 0 && i != (int)LastProduktGrid + (int)TakeOldNumbBySqrt)
+                    //{
+                    //    //i += KalenderRasterRow;
 
-                        for (int j = 0; j < ColumnGrid; j++)
-                        {
-                            DefaultButtonInfoGUI.Add(Day, backgroundcolor, prioritycolors, KPosition, ColumnGridPointer, RowGridPointer);
+                    //    RowGridPointer++;
+                    //    ColumnGridPointer = 0;
+                    //}
 
-                            cb.MyButtonFeld[i] = new Button();
-                            if (cb.MyButtonFeld[i].Width < 880)
-                            {
-                                cb.MyButtonFeld[i].Content = $"{DefaultButtonInfoGUI.ShortDayName}-{i}";
-                            }
-                            else
-                            {
-                                cb.MyButtonFeld[i].Content = cb.CalenderDays(i);      // Für die Abkürzungen verändern (Notepad++ Zeile 50-54)
-                            }
-                            cb.MyButtonFeld[i].Background = DefaultButtonInfoGUI.ButtonsBackgroundColor;
 
-                            Grid.SetColumn(cb.MyButtonFeld[i], ColumnGridPointer);
-                            Grid.SetRow(cb.MyButtonFeld[i], RowGridPointer);
-
-                            KPosition.Children.Add(cb.MyButtonFeld[i]);
-
-                            ColumnGridPointer++;
-                        }
-                        ColumnGridPointer = 0;
-                    }
+                    // Für die Abkürzungen verändern (Notepad++ Zeile 50-54)
 
                     cb.MyButtonFeld[i] = new Button();
+
+                    // Für die Abkürzungen verändern (Notepad++ Zeile 50-54)
+
+                    cb.MyButtonFeld[i] = new Button();     // ANFANGEN MIT 56
+
                     cb.MyButtonFeld[i].Content = cb.CalenderDays(i);
-                    cb.MyButtonFeld[i].Background = DefaultButtonInfoGUI.ButtonsBackgroundColor;       // ACHTE DAS BACKGROUND NICHT NULL IST.
+                    cb.MyButtonFeld[i].Background = DefaultButtonInfoGUI.ButtonsBackgroundColor;
 
                     Grid.SetColumn(cb.MyButtonFeld[i], ColumnGridPointer);
-                    Grid.SetRow(cb.MyButtonFeld[i], RowGridPointer);
+                    Grid.SetRow(cb.MyButtonFeld[i], KalenderRasterRow);
 
-                    KPosition.Children.Add(cb.MyButtonFeld[i]);
-
+                    cb.KPositionFeld.Children.Add(cb.MyButtonFeld[i]);
                     ColumnGridPointer++;
+
                 }
             }
 
@@ -394,7 +368,7 @@ namespace Calendex
 
             for (int i = 0; i < cb.ProduktGrid; i++)
             {
-                if (MainWindowAttribute.Width < 880 && i %7 == 0)
+                if (MainWindowAttribute.Width < 880 && i % 7 == 0)
                 {
                     //switch cb.MyButtonFeld[i].Content = $"{i => i; i %2 == 0}";
                     //jeder block ein dazugehörigen monat, hab da kein bock mehr
@@ -406,7 +380,7 @@ namespace Calendex
 
                 }
             }
-            
+
         }
 
         private void GridOptionButton_GotFocus(object sender, RoutedEventArgs e)
@@ -425,11 +399,11 @@ namespace Calendex
             newColumn1.Width = new GridLength(1, GridUnitType.Star);
             newRow1.Height = new GridLength(1, GridUnitType.Star);
 
-            
 
 
-           KalenderRaster.ColumnDefinitions.RemoveAt(1);
-           KalenderRaster.RowDefinitions.RemoveAt(1);
+
+            KalenderRaster.ColumnDefinitions.RemoveAt(1);
+            KalenderRaster.RowDefinitions.RemoveAt(1);
 
 
             double ActualNormalNumber = Math.Sqrt(ActualCubeNumber);
@@ -441,6 +415,7 @@ namespace Calendex
 
             for (int i = 0; i < cb.ProduktGrid; i++) { cb.MyButtonFeld[i].Click += ControllTheGrid; }
 
+            // Sollte nur auf 5 Grids (Minimus Beschränken)
         }
 
 
@@ -462,17 +437,28 @@ namespace Calendex
             double CubeNumber = Math.Pow(ActualNormalNumber, 2);
             // Es muss doch nichts nochmal entfernent weil es nichts zum enfernen gibt, und die Abonnierungs methode macht kein unterschied zum welchen es gehört
 
+
+
+
+            
+            
             UpdateLoop("Monday", NormalBrush, GreenBrush, KalenderRaster, false);
 
             for (int i = 0; i < cb.ProduktGrid; i++)
             {
                 if (cb.MyButtonFeld[i] == null)
                 {
-                    cb.MyButtonFeld[i].Click += ControllTheGrid;
+                        cb.MyButtonFeld[i].Click += ControllTheGrid;
                 }
-            }
-        }
 
+            }
+
+
+
+           
+
+
+        }
         private void ReloadButton_Click(object sender, RoutedEventArgs e)
         {
             double ActualNormalNumber = Math.Sqrt(ActualCubeNumber);
@@ -480,7 +466,7 @@ namespace Calendex
             double CubeNumber = Math.Pow(ActualNormalNumber, 2);
 
             int KalenderRasterColumn = KalenderRaster.ColumnDefinitions.Count;
-            int KalenderRasterRow    = KalenderRaster.RowDefinitions.Count;
+            int KalenderRasterRow = KalenderRaster.RowDefinitions.Count;
             cb.ProduktGrid = KalenderRasterColumn * KalenderRasterRow;
 
             for (int i = cb.ProduktGrid; i > 0; i--) { cb.MyButtonFeld[i].Click -= ControllTheGrid; }
@@ -490,6 +476,4 @@ namespace Calendex
             for (int i = 0; i < cb.ProduktGrid; i++) { cb.MyButtonFeld[i].Click += ControllTheGrid; }
         }
     }
-
-
 }
